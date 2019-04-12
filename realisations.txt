@@ -1,0 +1,10 @@
+1. A piece of code if gets repeated more than once in the main code, make it into a function.
+
+2. Use a virtual machine to prevent your main machine from getting infected, cause if the VM gets infected. You can just delete it and everything will be fine. Create one VM and clone it. Cloning takes around 2 mins. Its better than installing a new VM every time you get infected.
+
+3. C is the most powerful programming language if one knows how to use it.
+
+4. MAC ADDRESS is who you are
+   IP  ADDRESS is where you are
+
+5. Passwords should not be shown while typing, not even the *.It gives an idea of how long the password is, Thats why linux doesnt show * when passwords are typed in the terminal.
