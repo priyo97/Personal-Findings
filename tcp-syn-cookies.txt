@@ -1,0 +1,23 @@
+TCP SYN COOKIES
+----------------
+
+This is a prevention mechanism to tackle against SYN flood attacks. Basically in normal case, to establish a connection which uses TCP as its transport layer protocol, a client needs to send a SYN packetto the server. AFter receiving the SYN Packet, the server adds a record (a 4 value tuple consisting of SOURCE IP, DEST IP, SOURCE PORT, DEST PORT) into its connection table (Its like a hash table, each entry represents a unique connection from a client) and sends back a SYN+ACK packet to the client. At this stage, the connection is HALF-OPEN and the conection tuple is occupying space in the connection table. So, Attackers can exploit this vulnerability and flood the server with syn packets without sending an ACK back to the server after getting a SYN+ACK from the server. Since the size of the connection table of the serevr is limited, if the attackers flood the serevr with SYN packets, at some point of time the connection table will be full with half open connections. Because of this, legitimate users who want to open a full connection with the server aren't able to do it as the server wont be able to put any new connection tuple into the connection table as it is full.
+    
+Here comes SYN cookies. If I have to explain at a very high level, what the server does is that whenever it gets a SYN packet, it doesnt put the connection tuple into the connection table. It contructs its sequence number based on the 4-value tuple. The sequence number is 32-bits long. To construct it, the server does the following:
+
+It takes:
+
+1. 5  bits from the timestamp
+2. 3  bits from the Maximum segment size (mss)
+3. 24 bits from s = Encryption(key, 4 value tuple)
+
+
+Using this the server contructs its starting sequence number and sends the SYN+ACK packet to the client. Now how will the server identify whether if it gets an ACK that the ACK is of a connection whose SYN it got and SYN+ACK was sent?
+
+What it does is the following...
+
+This is on the fact that when the client sends the ACK in response to the SYN+ACK, it takes the server sequence number, adds 1 to it and sends it as ACK. When the server receives it, it decrements the ACK by 1 and calculates the 4 value tuple from it by doing the reverse of what it did while sending the SYN+ACK. It then matches it witht he SOURCE IP , SOURCE PORT, DEST IP, DEST PORT of the Packet. If it matches then the server proceeds with the necessary processing and sending back response.
+
+
+
+----- This is my understanding till now. Will go more into depth in future-------
